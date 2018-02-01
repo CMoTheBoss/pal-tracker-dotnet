@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
 using Steeltoe.Management.CloudFoundry;
+using Steeltoe.Common.HealthChecks;
 
 namespace PalTracker
 {
@@ -39,6 +40,8 @@ namespace PalTracker
             ));
 
             services.AddScoped<ITimeEntryRepository, MySqlTimeEntryRepository>();
+            services.AddSingleton<IHealthContributor, TimeEntryHealthContributor>();
+
             services.AddDbContext<TimeEntryContext>(options => options.UseMySql(Configuration));     
 
             services.AddCloudFoundryActuators(Configuration);       
@@ -53,6 +56,7 @@ namespace PalTracker
             }
 
             app.UseMvc();
+            app.UseCloudFoundryActuators(); // Needs to occur after mvc to ensure that our controllers mapping take precedence over the actuator endpoints.
         }
     }
 }
