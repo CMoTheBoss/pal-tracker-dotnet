@@ -24,9 +24,9 @@ namespace PalTracker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddSingleton(sp => new WelcomeMessage(
-                Configuration.GetValue<string>("WELCOME_MESSAGE", "WELCOME_MESSAGE not configured.")
-            ));
+            // services.AddSingleton(sp => new WelcomeMessage(
+            //     Configuration.GetValue<string>("WELCOME_MESSAGE", "WELCOME_MESSAGE not configured.")
+            // ));
             services.AddSingleton(cf => new CloudFoundryInfo(Configuration.GetValue<string>("PORT", "N/A"), 
             Configuration.GetValue<string>("MEMORY_LIMIT", "N/A"), 
             Configuration.GetValue<string>("CF_INSTANCE_INDEX", "N/A"), 
