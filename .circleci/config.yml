@@ -102,7 +102,7 @@ jobs:
 
             cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $ENVIRONMENT
             cf push -f manifest-$ENVIRONMENT.yml
-            scripts/migrate-databases.sh pal-tracker . /root/project
+            ./migrate-databases.sh pal-tracker . /root/project
 
 workflows:
   version: 2
