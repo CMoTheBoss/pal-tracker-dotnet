@@ -39,7 +39,15 @@ jobs:
             echo "deb https://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list
             apt-get update
             apt-get install cf-cli
+      - run:
+          name: Install jq
+          command: |
+            apt-get -y install jq
 
+      - run:
+          name: Install flyway
+          command: |
+            curl https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.1.1/flyway-comma
       - run:
           name: Unzip artifacts
           command: |
@@ -53,7 +61,7 @@ jobs:
 
             cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $ENVIRONMENT
             cf push -f manifest-$ENVIRONMENT.yml
-
+            ./migrate-databases.sh pal-tracker . /root/project
   deployToProd:
     docker:
       - image: 'microsoft/dotnet:2-sdk'
@@ -73,7 +81,14 @@ jobs:
             echo "deb https://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list
             apt-get update
             apt-get install cf-cli
-
+      - run:
+          name: Install jq
+          command: |
+            apt-get -y install jq
+      - run:
+          name: Install flyway
+          command: |
+            curl https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.1.1/flyway-comm
       - run:
           name: Unzip artifacts
           command: |
@@ -87,6 +102,7 @@ jobs:
 
             cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORG -s $ENVIRONMENT
             cf push -f manifest-$ENVIRONMENT.yml
+            ./migrate-databases.sh pal-tracker . /root/project
 
 workflows:
   version: 2
